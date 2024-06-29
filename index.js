@@ -98,6 +98,9 @@ function updateSlider(sliderElement, toggleState){
 // ----------------------------------------- main --------------------------------------- //
 
 function renderLoop() {
+    var axisValueElements = document.querySelectorAll('[id^="axisValue"]');
+    var barElements = document.querySelectorAll('[id^="bar"]');
+    var buttonElements = document.querySelectorAll('[id^="buttonDesktop"]');
     //bytes 0: packet version
     //bytes 1-4: axes
     //bytes 5-6: button states
@@ -128,10 +131,14 @@ function renderLoop() {
 
     if (localStorage.getItem(toggleKeyboardWASD.id) === 'true') {
         for (let key of keyboardArray) {
-            if (key === 19 || key === 28) rawPacket[1] = clampUint8(rawPacket[2] - 128);
-            if (key === 22 || key === 30) rawPacket[1] = clampUint8(rawPacket[2] + 128);
-            if (key === 27 || key === 41) rawPacket[2] = clampUint8(rawPacket[1] - 128);
-            if (key === 29 || key === 37) rawPacket[2] = clampUint8(rawPacket[1] + 128);
+            if (key === 19) rawPacket[1] = clampUint8(rawPacket[1] - 128); //A
+            if (key === 22) rawPacket[1] = clampUint8(rawPacket[1] + 128); //D
+            if (key === 41) rawPacket[2] = clampUint8(rawPacket[2] - 128); //W
+            if (key === 37) rawPacket[2] = clampUint8(rawPacket[2] + 128); //S
+            if(key===28) rawPacket[3] = clampUint8(rawPacket[3] - 128); //J
+            if(key===30) rawPacket[3] = clampUint8(rawPacket[3] + 128); //L
+            if(key===27) rawPacket[4] = clampUint8(rawPacket[4] - 128); //I
+            if(key===29) rawPacket[4] = clampUint8(rawPacket[4] + 128); //K
             if (key === 44 || key === 20) rawPacket[5] |= (1 << 0)
             if (key === 42 || key === 32) rawPacket[5] |= (1 << 1)
             if (key === 21 || key === 31) rawPacket[5] |= (1 << 2)
@@ -139,9 +146,18 @@ function renderLoop() {
         }
     }
 
-    if (!document.hasFocus()) { rawPacket.fill(0, 0, 20); }
+    if (!document.hasFocus()) { rawPacket.fill(0, 7, 20); }
 
-    //console.log(rawPacket)
+    if(localStorage.getItem(toggleKeyboardWASD.id) === 'true'){
+        for(let i=0; i<4; i++){
+            let axisValGamepad = rawPacket[i+1];
+            axisValueElements[i].textContent = axisValGamepad
+            let percentage = Math.round(axisValGamepad*100/255);
+            barElements[i].style.background = `linear-gradient(to right, var(--alf-green) ${percentage}%, grey 0%)`;
+        }
+    }
+
+    // console.log(rawPacket)
     bleAgent.attemptSend(rawPacket);
 }
 
