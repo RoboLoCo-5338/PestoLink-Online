@@ -121,6 +121,7 @@ function renderLoop() {
 
     keyboardArray = keyboardAgent.getKeyboardArray()
     var keys = {
+        //Change these to change which keys are bound to which button.
         'axis0+':22,
         'axis0-':19,
         'axis1+':37,
@@ -129,22 +130,22 @@ function renderLoop() {
         'axis2-':28,
         'axis3+':29,
         'axis3-':27,
-        'button0':5,
-        'button1':6,
-        'button2':7,
-        'button3':8,
-        'button4':9,
-        'button5':10,
-        'button6':11,
-        'button7':12,
-        'button8':13,
-        'button9':14,
-        'button10':35,
-        'button11':23,
-        'button12':36,
-        'button13':38,
-        'button14':43,
-        'button15':39
+        'button0':35,
+        'button1':23,
+        'button2':36,
+        'button3':38,
+        'button4':43,
+        'button5':39,
+        'button6':33,
+        'button7':34,
+        'button8':44,
+        'button9':42,
+        'button10':21,
+        'button11':40,
+        'button12':20,
+        'button13':32,
+        'button14':31,
+        'button15':4
     }
 
     for (let i = 0; i < 12; i++) {
@@ -189,27 +190,30 @@ function renderLoop() {
         buttonElements.forEach((button) => button.style.background='grey')
         if(rawPacket[5]!=0 || rawPacket[6]!=0){
             for(let i=7; rawPacket[i]!=0; i++){
-                if(rawPacket[i]<=14){
-                    buttonElements[rawPacket[i]-5].style.background = 'var(--alf-green)';
+                if(Object.values(keys).slice(8).includes(rawPacket[i])){
+                    buttonElements[Object.values(keys).slice(8).indexOf(rawPacket[i])].style.background='var(--alf-green)';
                 }
-                else if(rawPacket[i]===35){
-                    buttonElements[10].style.background = 'var(--alf-green)';
-                }
-                else if(rawPacket[i]===23){
-                    buttonElements[11].style.background = 'var(--alf-green)';
-                }
-                else if(rawPacket[i]===36){
-                    buttonElements[12].style.background = 'var(--alf-green)';
-                }
-                else if(rawPacket[i]===38){
-                    buttonElements[13].style.background = 'var(--alf-green)';
-                }
-                else if(rawPacket[i]===43){
-                    buttonElements[14].style.background = 'var(--alf-green)';
-                }
-                else if(rawPacket[i]===39){
-                    buttonElements[15].style.background = 'var(--alf-green)';
-                }
+                // if(rawPacket[i]<=14){
+                //     buttonElements[rawPacket[i]-5].style.background = 'var(--alf-green)';
+                // }
+                // else if(rawPacket[i]===35){
+                //     buttonElements[10].style.background = 'var(--alf-green)';
+                // }
+                // else if(rawPacket[i]===23){
+                //     buttonElements[11].style.background = 'var(--alf-green)';
+                // }
+                // else if(rawPacket[i]===36){
+                //     buttonElements[12].style.background = 'var(--alf-green)';
+                // }
+                // else if(rawPacket[i]===38){
+                //     buttonElements[13].style.background = 'var(--alf-green)';
+                // }
+                // else if(rawPacket[i]===43){
+                //     buttonElements[14].style.background = 'var(--alf-green)';
+                // }
+                // else if(rawPacket[i]===39){
+                //     buttonElements[15].style.background = 'var(--alf-green)';
+                // }
             }
         }
     }
