@@ -15,6 +15,7 @@ let hackSpacerElement = document.getElementById("hack-spacer");
 let toggleMobile = document.getElementById('toggle-mobile-layout');
 let toggleKeyboardWASD = document.getElementById('toggle-keyboard-style');
 let toggleInfo = document.getElementById('toggle-info');
+let lastKeyPressed = 1;
 
 // --------------------------- state management ------------------------------------ //
 
@@ -101,6 +102,7 @@ function renderLoop() {
     var axisValueElements = document.querySelectorAll('[id^="axisValue"]');
     var barElements = document.querySelectorAll('[id^="bar"]');
     var buttonElements = document.querySelectorAll('[id^="buttonDesktop"]');
+    // console.log(document.lastKeyPressed);
     //bytes 0: packet version
     //bytes 1-4: axes
     //bytes 5-6: button states
@@ -118,6 +120,32 @@ function renderLoop() {
     rawPacket[6] = buttonCallback().byte1
 
     keyboardArray = keyboardAgent.getKeyboardArray()
+    var keys = {
+        'axis0+':22,
+        'axis0-':19,
+        'axis1+':37,
+        'axis1-':41,
+        'axis2+':30,
+        'axis2-':28,
+        'axis3+':29,
+        'axis3-':27,
+        'button0':5,
+        'button1':6,
+        'button2':7,
+        'button3':8,
+        'button4':9,
+        'button5':10,
+        'button6':11,
+        'button7':12,
+        'button8':13,
+        'button9':14,
+        'button10':35,
+        'button11':23,
+        'button12':36,
+        'button13':38,
+        'button14':43,
+        'button15':39
+    }
 
     for (let i = 0; i < 12; i++) {
         if (keyboardArray.length > i) {
@@ -131,18 +159,21 @@ function renderLoop() {
 
     if (localStorage.getItem(toggleKeyboardWASD.id) === 'true') {
         for (let key of keyboardArray) {
-            if (key === 19) rawPacket[1] = clampUint8(rawPacket[1] - 128); //A
-            if (key === 22) rawPacket[1] = clampUint8(rawPacket[1] + 128); //D
-            if (key === 41) rawPacket[2] = clampUint8(rawPacket[2] - 128); //W
-            if (key === 37) rawPacket[2] = clampUint8(rawPacket[2] + 128); //S
-            if(key===28) rawPacket[3] = clampUint8(rawPacket[3] - 128); //J
-            if(key===30) rawPacket[3] = clampUint8(rawPacket[3] + 128); //L
-            if(key===27) rawPacket[4] = clampUint8(rawPacket[4] - 128); //I
-            if(key===29) rawPacket[4] = clampUint8(rawPacket[4] + 128); //K
-            if (key === 44 || key === 20) rawPacket[5] |= (1 << 0)
-            if (key === 42 || key === 32) rawPacket[5] |= (1 << 1)
-            if (key === 21 || key === 31) rawPacket[5] |= (1 << 2)
-            if (key === 40 || key === 4) rawPacket[5] |= (1 << 3)
+            // console.log(this);
+            if (key === keys['axis0-']) rawPacket[1] = clampUint8(rawPacket[1] - 128); //A
+            if (key === keys['axis0+']) rawPacket[1] = clampUint8(rawPacket[1] + 128); //D
+            if (key === keys['axis1-']) rawPacket[2] = clampUint8(rawPacket[2] - 128); //W
+            if (key === keys['axis1+']) rawPacket[2] = clampUint8(rawPacket[2] + 128); //S
+            if(key===keys['axis2-']) rawPacket[3] = clampUint8(rawPacket[3] - 128); //J
+            if(key===keys['axis2+']) rawPacket[3] = clampUint8(rawPacket[3] + 128); //L
+            if(key===keys['axis3-']) rawPacket[4] = clampUint8(rawPacket[4] - 128); //I
+            if(key===keys['axis3+']) rawPacket[4] = clampUint8(rawPacket[4] + 128); //K
+            for(let i=0; i<8; i++){
+                if(key===keys['button'+i]) rawPacket[5] |= (1 << i)
+            }
+            for(let i=8; i<16; i++){
+                if(key===keys['button'+i]) rawPacket[6] |= (1 << i-8)
+            }
         }
     }
 
@@ -154,6 +185,32 @@ function renderLoop() {
             axisValueElements[i].textContent = axisValGamepad
             let percentage = Math.round(axisValGamepad*100/255);
             barElements[i].style.background = `linear-gradient(to right, var(--alf-green) ${percentage}%, grey 0%)`;
+        }
+        buttonElements.forEach((button) => button.style.background='grey')
+        if(rawPacket[5]!=0 || rawPacket[6]!=0){
+            for(let i=7; rawPacket[i]!=0; i++){
+                if(rawPacket[i]<=14){
+                    buttonElements[rawPacket[i]-5].style.background = 'var(--alf-green)';
+                }
+                else if(rawPacket[i]===35){
+                    buttonElements[10].style.background = 'var(--alf-green)';
+                }
+                else if(rawPacket[i]===23){
+                    buttonElements[11].style.background = 'var(--alf-green)';
+                }
+                else if(rawPacket[i]===36){
+                    buttonElements[12].style.background = 'var(--alf-green)';
+                }
+                else if(rawPacket[i]===38){
+                    buttonElements[13].style.background = 'var(--alf-green)';
+                }
+                else if(rawPacket[i]===43){
+                    buttonElements[14].style.background = 'var(--alf-green)';
+                }
+                else if(rawPacket[i]===39){
+                    buttonElements[15].style.background = 'var(--alf-green)';
+                }
+            }
         }
     }
 
@@ -490,16 +547,16 @@ function createGamepadAgent() {
 // -------------------------------------------- keyboard --------------------------------------- //
 
 function createKeyboardAgent() {
-
     document.addEventListener('keydown', handleKeyboardInput);
     document.addEventListener('keyup', handleKeyboardInput);
 
     function handleKeyboardInput(event) {
         if (event.repeat != true) {
             keyEventQueue.push(event);
+            this.lastKeyPressed=event.code;
         }
     }
-
+    // this.console.log(this);
     var keyEventQueue = [];
     var keyboardState = [];
 
