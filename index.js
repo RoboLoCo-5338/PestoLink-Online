@@ -224,6 +224,7 @@ async function renderLoop() {
             let percentage = Math.round(axisValGamepad*100/255);
             barElements[i].style.background = `linear-gradient(to right, var(--alf-green) ${percentage}%, grey 0%)`;
         }
+        if(Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length<1) buttonElements.forEach((button) => button.style.background='grey');
         if(rawPacket[5]!=0 || rawPacket[6]!=0){
             for(let i=7; rawPacket[i]!=0; i++){
                 if(Object.values(keys).slice(8).includes(rawPacket[i])){
