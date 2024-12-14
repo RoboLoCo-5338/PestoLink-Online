@@ -146,14 +146,15 @@ async function renderLoop() {
     let rawPacket = new Uint8Array(1 + 4 + 2 + 11 + 1)
 
     rawPacket[0] = 0x01; //packet version
+    if(!(Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length==1 && localStorage.getItem(toggleDualControllers.id) === 'true' && localStorage.getItem(toggleKeyboardWASD.id) === 'true')){
+        rawPacket[1] = axisCallback().axis0
+        rawPacket[2] = axisCallback().axis1
+        rawPacket[3] = axisCallback().axis2
+        rawPacket[4] = axisCallback().axis3
 
-    rawPacket[1] = axisCallback().axis0
-    rawPacket[2] = axisCallback().axis1
-    rawPacket[3] = axisCallback().axis2
-    rawPacket[4] = axisCallback().axis3
-
-    rawPacket[5] = buttonCallback().byte0
-    rawPacket[6] = buttonCallback().byte1
+        rawPacket[5] = buttonCallback().byte0
+        rawPacket[6] = buttonCallback().byte1
+    }
     rawPacket[18] = 0
 
     keyboardArray = keyboardAgent.getKeyboardArray()
@@ -260,17 +261,30 @@ async function renderLoop() {
     await bleAgent.attemptSend(rawPacket);
     if(localStorage.getItem(toggleDualControllers.id) === 'true'){
         let rawPacket2 = new Uint8Array(1 + 4 + 2 + 11 + 1)
-
-        rawPacket2[0] = 0x01; //packet version
-    
-        rawPacket2[1] = secondaryAxisCallback().axis0
-        rawPacket2[2] = secondaryAxisCallback().axis1
-        rawPacket2[3] = secondaryAxisCallback().axis2
-        rawPacket2[4] = secondaryAxisCallback().axis3
-    
-        rawPacket2[5] = secondaryButtonCallback().byte0
-        rawPacket2[6] = secondaryButtonCallback().byte1
-        rawPacket2[18] = 1;
+        if((Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length==1 && localStorage.getItem(toggleKeyboardWASD.id) === 'true')){
+            rawPacket2[0] = 0x01; //packet version
+        
+            rawPacket2[1] = axisCallback().axis0
+            rawPacket2[2] = axisCallback().axis1
+            rawPacket2[3] = axisCallback().axis2
+            rawPacket2[4] = axisCallback().axis3
+        
+            rawPacket2[5] = buttonCallback().byte0
+            rawPacket2[6] = buttonCallback().byte1
+            rawPacket2[18] = 1;
+        }
+        else{
+            rawPacket2[0] = 0x01; //packet version
+        
+            rawPacket2[1] = secondaryAxisCallback().axis0
+            rawPacket2[2] = secondaryAxisCallback().axis1
+            rawPacket2[3] = secondaryAxisCallback().axis2
+            rawPacket2[4] = secondaryAxisCallback().axis3
+        
+            rawPacket2[5] = secondaryButtonCallback().byte0
+            rawPacket2[6] = secondaryButtonCallback().byte1
+            rawPacket2[18] = 1;
+        }
         // console.log(rawPacket2);
         await bleAgent.attemptSend(rawPacket2);
     }
@@ -595,10 +609,10 @@ function createGamepadAgent(gamepadNum) {
     function getSelectedGamepad() {
         return getGamepads().find(gamepad => gamepad.index == gamepadNum);
     }
-
-    var axisValueElements = document.querySelectorAll('[id^="'+gamepadNum+'axisValue"]');
-    var barElements = document.querySelectorAll('[id^="'+gamepadNum+'bar"]');
-    var buttonElements = document.querySelectorAll('[id^="'+gamepadNum+'buttonDesktop"]');
+    let usingControllerAsSecondary = (Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length==1 && localStorage.getItem(toggleDualControllers.id) === 'true' && localStorage.getItem(toggleKeyboardWASD.id) === 'true')
+    var axisValueElements = document.querySelectorAll('[id^="'+(usingControllerAsSecondary)? 1:gamepadNum+'axisValue"]');
+    var barElements = document.querySelectorAll('[id^="'+(usingControllerAsSecondary)? 1: gamepadNum+'bar"]');
+    var buttonElements = document.querySelectorAll('[id^="'+(usingControllerAsSecondary)? 1:gamepadNum +'buttonDesktop"]');
 
     function convertUnitFloatToByte(unitFloat) {
         let byte = 127
