@@ -35,30 +35,30 @@ if (localStorage.getItem(toggleMobile.id) == null) {
         localStorage.setItem(toggleMobile.id, 'false');
     }
     updateMobileSlider(toggleMobile, false);
- }
+}
 
- if(isMobile) for (let element of helpRow) element.style.display = "none";
+if (isMobile) for (let element of helpRow) element.style.display = "none";
 
 document.addEventListener('DOMContentLoaded', function () {
-    updateMobileSlider(toggleMobile, toggleState=false);
-    updateKeyboardSlider(toggleKeyboardWASD, toggleState=false);
-    updateInfoSlider(toggleInfo, toggleState=false);
-    updateDualControllerSlider(toggleDualControllers, toggleState=false);
+    updateMobileSlider(toggleMobile, toggleState = false);
+    updateKeyboardSlider(toggleKeyboardWASD, toggleState = false);
+    updateInfoSlider(toggleInfo, toggleState = false);
+    updateDualControllerSlider(toggleDualControllers, toggleState = false);
 
-    toggleMobile.onmousedown = updateMobileSlider.bind(null, toggleMobile, toggleState=true)
-    toggleKeyboardWASD.onmousedown = updateKeyboardSlider.bind(null, toggleKeyboardWASD, toggleState=true)
-    toggleInfo.onmousedown =     updateInfoSlider.bind(null, toggleInfo, toggleState=true)
-    toggleDualControllers.onmousedown = updateDualControllerSlider.bind(null, toggleDualControllers, toggleState=true)
-    
-    toggleMobile.ontouchstart = updateMobileSlider.bind(null, toggleMobile, toggleState=true)
-    toggleKeyboardWASD.ontouchstart = updateKeyboardSlider.bind(null, toggleKeyboardWASD, toggleState=true)
-    toggleInfo.ontouchstart =     updateInfoSlider.bind(null, toggleInfo, toggleState=true)
-    toggleDualControllers.ontouchstart = updateDualControllerSlider.bind(null, toggleDualControllers, toggleState=true)
-    
+    toggleMobile.onmousedown = updateMobileSlider.bind(null, toggleMobile, toggleState = true)
+    toggleKeyboardWASD.onmousedown = updateKeyboardSlider.bind(null, toggleKeyboardWASD, toggleState = true)
+    toggleInfo.onmousedown = updateInfoSlider.bind(null, toggleInfo, toggleState = true)
+    toggleDualControllers.onmousedown = updateDualControllerSlider.bind(null, toggleDualControllers, toggleState = true)
+
+    toggleMobile.ontouchstart = updateMobileSlider.bind(null, toggleMobile, toggleState = true)
+    toggleKeyboardWASD.ontouchstart = updateKeyboardSlider.bind(null, toggleKeyboardWASD, toggleState = true)
+    toggleInfo.ontouchstart = updateInfoSlider.bind(null, toggleInfo, toggleState = true)
+    toggleDualControllers.ontouchstart = updateDualControllerSlider.bind(null, toggleDualControllers, toggleState = true)
+
     window.setInterval(renderLoop, 100); // call renderLoop every num milliseconds
 });
 
-function updateMobileSlider(sliderElement, toggleState){
+function updateMobileSlider(sliderElement, toggleState) {
     updateSlider(sliderElement, toggleState);
 
     if (localStorage.getItem(toggleMobile.id) === 'true') {
@@ -74,7 +74,7 @@ function updateMobileSlider(sliderElement, toggleState){
     }
 }
 
-function updateInfoSlider(sliderElement, toggleState){
+function updateInfoSlider(sliderElement, toggleState) {
     updateSlider(sliderElement, toggleState);
 
     if (localStorage.getItem(toggleInfo.id) === 'true') {
@@ -85,48 +85,48 @@ function updateInfoSlider(sliderElement, toggleState){
         hackSpacerElement.style.display = "grid";
     }
 }
-function updateKeyboardSlider(sliderElement, toggleState){
+function updateKeyboardSlider(sliderElement, toggleState) {
     let buttonElements = document.querySelectorAll('[id^="0buttonDesktop"]');
     updateSlider(sliderElement, toggleState);
-    let keys=['Q','E','R','T','Y','U','O','P','Z','X','C','V','B','N','M',','];
+    let keys = ['Q', 'E', 'R', 'T', 'Y', 'U', 'O', 'P', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ','];
     if (localStorage.getItem(toggleKeyboardWASD.id) === 'true') {
-        buttonElements.forEach((button, index)=>button.textContent=keys[index]);
+        buttonElements.forEach((button, index) => button.textContent = keys[index]);
     } else {
-        buttonElements.forEach((button, index)=>button.textContent=index);
+        buttonElements.forEach((button, index) => button.textContent = index);
     }
 }
-function updateDualControllerSlider(sliderElement, toggleState){
+function updateDualControllerSlider(sliderElement, toggleState) {
     updateSlider(sliderElement, toggleState);
     if (localStorage.getItem(toggleDualControllers.id) === 'true') {
-        document.getElementById("desktop-button1").style.display="grid"
-        document.getElementById("desktop-axis1").style.display="grid"
+        document.getElementById("desktop-button1").style.display = "grid"
+        document.getElementById("desktop-axis1").style.display = "grid"
         console.log(document.getElementById("desktop-button1").hidden);
         for (let element of desktopElements) element.style.height = "20vw";
     } else {
-        document.getElementById("desktop-button1").style.display="none"
-        document.getElementById("desktop-axis1").style.display="none"
+        document.getElementById("desktop-button1").style.display = "none"
+        document.getElementById("desktop-axis1").style.display = "none"
         for (let element of desktopElements) element.style.height = "30vw";
     }
 }
-function updateSlider(sliderElement, toggleState){
-    if(toggleState){
-        if ( localStorage.getItem(sliderElement.id) === 'true') {
+function updateSlider(sliderElement, toggleState) {
+    if (toggleState) {
+        if (localStorage.getItem(sliderElement.id) === 'true') {
             localStorage.setItem(sliderElement.id, 'false');
         } else {
             localStorage.setItem(sliderElement.id, 'true');
-        }        
+        }
     }
 
-    if ( localStorage.getItem(sliderElement.id) === 'true') {
+    if (localStorage.getItem(sliderElement.id) === 'true') {
         sliderElement.style.backgroundColor = 'var(--alf-green)';
         sliderElement.firstElementChild.style.transform = 'translateX(2vw)';
-        sliderElement.firstElementChild.style.webkitTransform  = 'translateX(2vw)';
+        sliderElement.firstElementChild.style.webkitTransform = 'translateX(2vw)';
         sliderElement.firstElementChild.style.msTransform = 'translateX(2vw)';
 
     } else {
         sliderElement.style.backgroundColor = 'rgb(189, 188, 188)';
         sliderElement.firstElementChild.style.transform = 'none';
-        sliderElement.firstElementChild.style.webkitTransform  = 'none';
+        sliderElement.firstElementChild.style.webkitTransform = 'none';
         sliderElement.firstElementChild.style.msTransform = 'none';
     }
 }
@@ -146,7 +146,7 @@ async function renderLoop() {
     let rawPacket = new Uint8Array(1 + 4 + 2 + 11 + 1)
 
     rawPacket[0] = 0x01; //packet version
-    if(!(Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length==1 && localStorage.getItem(toggleDualControllers.id) === 'true' && localStorage.getItem(toggleKeyboardWASD.id) === 'true')){
+    if (!(Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length == 1 && localStorage.getItem(toggleDualControllers.id) === 'true' && localStorage.getItem(toggleKeyboardWASD.id) === 'true')) {
         rawPacket[1] = axisCallback().axis0
         rawPacket[2] = axisCallback().axis1
         rawPacket[3] = axisCallback().axis2
@@ -160,30 +160,30 @@ async function renderLoop() {
     keyboardArray = keyboardAgent.getKeyboardArray()
     var keys = {
         //Change these to change which keys are bound to which button.
-        'axis0+':22,
-        'axis0-':19,
-        'axis1+':37,
-        'axis1-':41,
-        'axis2+':30,
-        'axis2-':28,
-        'axis3+':29,
-        'axis3-':27,
-        'button0':35,
-        'button1':23,
-        'button2':36,
-        'button3':38,
-        'button4':43,
-        'button5':39,
-        'button6':33,
-        'button7':34,
-        'button8':44,
-        'button9':42,
-        'button10':21,
-        'button11':40,
-        'button12':20,
-        'button13':32,
-        'button14':31,
-        'button15':4
+        'axis0+': 22,
+        'axis0-': 19,
+        'axis1+': 37,
+        'axis1-': 41,
+        'axis2+': 30,
+        'axis2-': 28,
+        'axis3+': 29,
+        'axis3-': 27,
+        'button0': 35,
+        'button1': 23,
+        'button2': 36,
+        'button3': 38,
+        'button4': 43,
+        'button5': 39,
+        'button6': 33,
+        'button7': 34,
+        'button8': 44,
+        'button9': 42,
+        'button10': 21,
+        'button11': 40,
+        'button12': 20,
+        'button13': 32,
+        'button14': 31,
+        'button15': 4
     }
 
     for (let i = 0; i < 12; i++) {
@@ -203,33 +203,33 @@ async function renderLoop() {
             if (key === keys['axis0+']) rawPacket[1] = clampUint8(rawPacket[1] + 128); //D
             if (key === keys['axis1-']) rawPacket[2] = clampUint8(rawPacket[2] - 128); //W
             if (key === keys['axis1+']) rawPacket[2] = clampUint8(rawPacket[2] + 128); //S
-            if(key===keys['axis2-']) rawPacket[3] = clampUint8(rawPacket[3] - 128); //J
-            if(key===keys['axis2+']) rawPacket[3] = clampUint8(rawPacket[3] + 128); //L
-            if(key===keys['axis3-']) rawPacket[4] = clampUint8(rawPacket[4] - 128); //I
-            if(key===keys['axis3+']) rawPacket[4] = clampUint8(rawPacket[4] + 128); //K
-            for(let i=0; i<8; i++){
-                if(key===keys['button'+i]) rawPacket[5] |= (1 << i)
+            if (key === keys['axis2-']) rawPacket[3] = clampUint8(rawPacket[3] - 128); //J
+            if (key === keys['axis2+']) rawPacket[3] = clampUint8(rawPacket[3] + 128); //L
+            if (key === keys['axis3-']) rawPacket[4] = clampUint8(rawPacket[4] - 128); //I
+            if (key === keys['axis3+']) rawPacket[4] = clampUint8(rawPacket[4] + 128); //K
+            for (let i = 0; i < 8; i++) {
+                if (key === keys['button' + i]) rawPacket[5] |= (1 << i)
             }
-            for(let i=8; i<16; i++){
-                if(key===keys['button'+i]) rawPacket[6] |= (1 << i-8)
+            for (let i = 8; i < 16; i++) {
+                if (key === keys['button' + i]) rawPacket[6] |= (1 << i - 8)
             }
         }
     }
 
     if (!document.hasFocus()) { rawPacket.fill(0, 7, 20); }
 
-    if(localStorage.getItem(toggleKeyboardWASD.id) === 'true'){
-        for(let i=0; i<4; i++){
-            let axisValGamepad = rawPacket[i+1];
+    if (localStorage.getItem(toggleKeyboardWASD.id) === 'true') {
+        for (let i = 0; i < 4; i++) {
+            let axisValGamepad = rawPacket[i + 1];
             axisValueElements[i].textContent = axisValGamepad
-            let percentage = Math.round(axisValGamepad*100/255);
+            let percentage = Math.round(axisValGamepad * 100 / 255);
             barElements[i].style.background = `linear-gradient(to right, var(--alf-green) ${percentage}%, grey 0%)`;
         }
-        if(Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length<1) buttonElements.forEach((button) => button.style.background='grey');
-        if(rawPacket[5]!=0 || rawPacket[6]!=0){
-            for(let i=7; rawPacket[i]!=0; i++){
-                if(Object.values(keys).slice(8).includes(rawPacket[i])){
-                    buttonElements[Object.values(keys).slice(8).indexOf(rawPacket[i])].style.background='var(--alf-green)';
+        if (Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length < 1) buttonElements.forEach((button) => button.style.background = 'grey');
+        if (rawPacket[5] != 0 || rawPacket[6] != 0) {
+            for (let i = 7; rawPacket[i] != 0; i++) {
+                if (Object.values(keys).slice(8).includes(rawPacket[i])) {
+                    buttonElements[Object.values(keys).slice(8).indexOf(rawPacket[i])].style.background = 'var(--alf-green)';
                 }
                 // if(rawPacket[i]<=14){
                 //     buttonElements[rawPacket[i]-5].style.background = 'var(--alf-green)';
@@ -259,28 +259,28 @@ async function renderLoop() {
     // console.log(rawPacket)
 
     await bleAgent.attemptSend(rawPacket);
-    if(localStorage.getItem(toggleDualControllers.id) === 'true'){
+    if (localStorage.getItem(toggleDualControllers.id) === 'true') {
         let rawPacket2 = new Uint8Array(1 + 4 + 2 + 11 + 1)
-        if((Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length==1 && localStorage.getItem(toggleKeyboardWASD.id) === 'true')){
+        if ((Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length == 1 && localStorage.getItem(toggleKeyboardWASD.id) === 'true')) {
             rawPacket2[0] = 0x01; //packet version
-        
+
             rawPacket2[1] = axisCallback().axis0
             rawPacket2[2] = axisCallback().axis1
             rawPacket2[3] = axisCallback().axis2
             rawPacket2[4] = axisCallback().axis3
-        
+
             rawPacket2[5] = buttonCallback().byte0
             rawPacket2[6] = buttonCallback().byte1
             rawPacket2[18] = 1;
         }
-        else{
+        else {
             rawPacket2[0] = 0x01; //packet version
-        
+
             rawPacket2[1] = secondaryAxisCallback().axis0
             rawPacket2[2] = secondaryAxisCallback().axis1
             rawPacket2[3] = secondaryAxisCallback().axis2
             rawPacket2[4] = secondaryAxisCallback().axis3
-        
+
             rawPacket2[5] = secondaryButtonCallback().byte0
             rawPacket2[6] = secondaryButtonCallback().byte1
             rawPacket2[18] = 1;
@@ -301,7 +301,7 @@ function createBleAgent() {
     const CHARACTERISTIC_UUID_GAMEPAD = '452af57e-ad27-422c-88ae-76805ea641a9';
     const CHARACTERISTIC_UUID_TELEMETRY = '266d9d74-3e10-4fcd-88d2-cb63b5324d0c';
 
-    if (isMobile){
+    if (isMobile) {
         buttonBLE.ontouchend = updateBLE;
     } else {
         buttonBLE.onclick = updateBLE;
@@ -332,7 +332,7 @@ function createBleAgent() {
     async function connectBLE() {
 
         try {
-            if (device == null){
+            if (device == null) {
                 displayBleStatus('Connecting', 'black');
                 device = await navigator.bluetooth.requestDevice({ filters: [{ services: [SERVICE_UUID_PESTOBLE] }] });
             } else {
@@ -341,13 +341,13 @@ function createBleAgent() {
 
             server = await device.gatt.connect();
             service = await server.getPrimaryService(SERVICE_UUID_PESTOBLE);
-            
+
             characteristic_gamepad = await service.getCharacteristic(CHARACTERISTIC_UUID_GAMEPAD);
-            try{
+            try {
                 characteristic_battery = await service.getCharacteristic(CHARACTERISTIC_UUID_TELEMETRY);
                 await characteristic_battery.startNotifications()
                 await characteristic_battery.addEventListener('characteristicvaluechanged', handleBatteryCharacteristic);
-            }catch{
+            } catch {
                 console.log("Pestolink version on robot is real old :(")
             }
 
@@ -363,19 +363,19 @@ function createBleAgent() {
             } else if (error.name === 'SecurityError') {
                 displayBleStatus('Security error', '#eb5b5b');
             } else {
-                console.log( error);
+                console.log(error);
                 displayBleStatus('Connection failed', '#eb5b5b');
                 connectBLE();
             }
         }
     }
 
-    function handleBatteryCharacteristic(event){
+    function handleBatteryCharacteristic(event) {
         batteryWatchdogReset();
         let value = event.target.value.getUint8(0);
-        let voltage = (value/255.0) * 12
+        let voltage = (value / 255.0) * 12
 
-        if(voltage >= 7.6) {
+        if (voltage >= 7.6) {
             batteryDisplay.style.textShadow = "0 0 2px green, 0 0 2px green, 0 0 2px green, 0 0 2px green";
         } else if (voltage >= 7) {
             batteryDisplay.style.textShadow = "0 0 2px green, 0 0 2px yellow, 0 0 2px yellow, 0 0 2px yellow";
@@ -427,7 +427,7 @@ function createBleAgent() {
     // Function to start or reset the watchdog timer
     function batteryWatchdogReset() {
         displayBleStatus('Connected', '#4dae50'); //green
-        if (timer) {clearTimeout(timer);}
+        if (timer) { clearTimeout(timer); }
         timer = setTimeout(() => {
             displayBleStatus('timeout?', 'black');
         }, timeout);
@@ -435,7 +435,7 @@ function createBleAgent() {
     // Function to stop the watchdog timer
     function batteryWatchdogStop() {
         batteryWatchdogReset()
-        if (timer) {clearTimeout(timer);timer = null;}
+        if (timer) { clearTimeout(timer); timer = null; }
     }
 
     return {
@@ -609,10 +609,10 @@ function createGamepadAgent(gamepadNum) {
     function getSelectedGamepad() {
         return getGamepads().find(gamepad => gamepad.index == gamepadNum);
     }
-    let usingControllerAsSecondary = (Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length==1 && localStorage.getItem(toggleDualControllers.id) === 'true' && localStorage.getItem(toggleKeyboardWASD.id) === 'true')
-    var axisValueElements = document.querySelectorAll('[id^="'+(usingControllerAsSecondary)? 1:gamepadNum+'axisValue"]');
-    var barElements = document.querySelectorAll('[id^="'+(usingControllerAsSecondary)? 1: gamepadNum+'bar"]');
-    var buttonElements = document.querySelectorAll('[id^="'+(usingControllerAsSecondary)? 1:gamepadNum +'buttonDesktop"]');
+    let documentID = (Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length == 1 && localStorage.getItem(toggleDualControllers.id) === 'true' && localStorage.getItem(toggleKeyboardWASD.id) === 'true') ? 1 : gamepadNum;
+    var axisValueElements = document.querySelectorAll('[id^="' + documentID + 'axisValue"]');
+    var barElements = document.querySelectorAll('[id^="' + documentID + 'bar"]');
+    var buttonElements = document.querySelectorAll('[id^="' + documentID + 'buttonDesktop"]');
 
     function convertUnitFloatToByte(unitFloat) {
         let byte = 127
@@ -647,7 +647,7 @@ function createGamepadAgent(gamepadNum) {
                 if (gamepad.buttons[i].pressed) {
                     firstByte |= (gamepad.buttons[i].pressed << i);
                     buttonElements[i].style.background = 'var(--alf-green)';
-                    
+
                 } else {
                     buttonElements[i].style.background = 'grey';
                 }
@@ -681,7 +681,7 @@ function createKeyboardAgent() {
     function handleKeyboardInput(event) {
         if (event.repeat != true) {
             keyEventQueue.push(event);
-            this.lastKeyPressed=event.code;
+            this.lastKeyPressed = event.code;
         }
     }
     // this.console.log(this);
