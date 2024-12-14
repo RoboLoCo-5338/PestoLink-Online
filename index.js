@@ -9,6 +9,7 @@ let secondaryGamepadAgent = createGamepadAgent(1);
 
 let axisCallback = null
 let buttonCallback = null
+let updateElementCallback = gamepadAgent.updateElements
 let secondaryAxisCallback = secondaryGamepadAgent.getAxes
 let secondaryButtonCallback = secondaryGamepadAgent.getButtons
 
@@ -137,6 +138,7 @@ async function renderLoop() {
     var axisValueElements = document.querySelectorAll('[id^="0axisValue"]');
     var barElements = document.querySelectorAll('[id^="0bar"]');
     var buttonElements = document.querySelectorAll('[id^="0buttonDesktop"]');
+    updateElementCallback();
     // console.log(document.lastKeyPressed);
     //bytes 0: packet version
     //bytes 1-4: axes
@@ -609,11 +611,16 @@ function createGamepadAgent(gamepadNum) {
     function getSelectedGamepad() {
         return getGamepads().find(gamepad => gamepad.index == gamepadNum);
     }
-    let documentID = (Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length == 1 && localStorage.getItem(toggleDualControllers.id) === 'true' && localStorage.getItem(toggleKeyboardWASD.id) === 'true') ? 1 : gamepadNum;
-    var axisValueElements = document.querySelectorAll('[id^="' + documentID + 'axisValue"]');
-    var barElements = document.querySelectorAll('[id^="' + documentID + 'bar"]');
-    var buttonElements = document.querySelectorAll('[id^="' + documentID + 'buttonDesktop"]');
+    var axisValueElements = document.querySelectorAll('[id^="' + gamepadNum + 'axisValue"]');
+    var barElements = document.querySelectorAll('[id^="' + gamepadNum + 'bar"]');
+    var buttonElements = document.querySelectorAll('[id^="' + gamepadNum + 'buttonDesktop"]');
 
+    function updateElementLists(newID){
+        let documentID = (Array.from(navigator.getGamepads()).filter(gamepad => gamepad).length == 1 && localStorage.getItem(toggleDualControllers.id) === 'true' && localStorage.getItem(toggleKeyboardWASD.id) === 'true') ? 1 : gamepadNum;
+        axisValueElements = document.querySelectorAll('[id^="' + documentID + 'axisValue"]');
+        barElements = document.querySelectorAll('[id^="' + documentID + 'bar"]');
+        buttonElements = document.querySelectorAll('[id^="' + documentID + 'buttonDesktop"]');
+    }
     function convertUnitFloatToByte(unitFloat) {
         let byte = 127
         if (unitFloat != 0) byte = Math.round((unitFloat + 1) * (255 / 2));
@@ -668,7 +675,8 @@ function createGamepadAgent(gamepadNum) {
 
     return {
         getAxes: getGamepadAxes,
-        getButtons: getButtonBytes
+        getButtons: getButtonBytes,
+        updateElements: updateElementLists
     }
 }
 
