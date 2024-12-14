@@ -157,6 +157,12 @@ async function renderLoop() {
         rawPacket[5] = buttonCallback().byte0
         rawPacket[6] = buttonCallback().byte1
     }
+    else{
+        rawPacket[1] = 127
+        rawPacket[2] = 127
+        rawPacket[3] = 127
+        rawPacket[4] = 127
+    }
     rawPacket[18] = 0
 
     keyboardArray = keyboardAgent.getKeyboardArray()
