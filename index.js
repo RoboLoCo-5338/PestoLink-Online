@@ -72,6 +72,15 @@ function updateMobileSlider(sliderElement, toggleState) {
         for (let element of desktopElements) element.style.display = "grid";
         axisCallback = gamepadAgent.getAxes
         buttonCallback = gamepadAgent.getButtons
+        if (localStorage.getItem(toggleDualControllers.id) === 'true') {
+            document.getElementById("desktop-button1").style.display = "grid"
+            document.getElementById("desktop-axis1").style.display = "grid"
+            for (let element of desktopElements) element.style.height = "20vw";
+        } else {
+            document.getElementById("desktop-button1").style.display = "none"
+            document.getElementById("desktop-axis1").style.display = "none"
+            for (let element of desktopElements) element.style.height = "30vw";
+        }
     }
 }
 
@@ -101,7 +110,6 @@ function updateDualControllerSlider(sliderElement, toggleState) {
     if (localStorage.getItem(toggleDualControllers.id) === 'true') {
         document.getElementById("desktop-button1").style.display = "grid"
         document.getElementById("desktop-axis1").style.display = "grid"
-        console.log(document.getElementById("desktop-button1").hidden);
         for (let element of desktopElements) element.style.height = "20vw";
     } else {
         document.getElementById("desktop-button1").style.display = "none"
