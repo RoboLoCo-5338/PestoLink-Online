@@ -27,6 +27,7 @@ let toggleKeyboardWASD = document.getElementById('toggle-keyboard-style');
 let toggleInfo = document.getElementById('toggle-info');
 let toggleDualControllers = document.getElementById('toggle-dual-controllers')
 let lastKeyPressed = 1;
+let lastSetting = false;
 
 // --------------------------- state management ------------------------------------ //
 if (localStorage.getItem(toggleMobile.id) == null) {
@@ -67,12 +68,17 @@ function updateMobileSlider(sliderElement, toggleState) {
         for (let element of mobileElements) element.style.display = "grid";
         axisCallback = axisAgent.getAxes
         buttonCallback = buttonAgent.getButtons
+        lastSetting = localStorage.getItem(toggleDualControllers.id) === 'true'
+        localStorage.setItem(toggleDualControllers.id) = 'false';
+        toggleDualControllers.style.display=false;
     } else {
         for (let element of mobileElements) element.style.display = "none";
         for (let element of desktopElements) element.style.display = "grid";
         axisCallback = gamepadAgent.getAxes
         buttonCallback = gamepadAgent.getButtons
-        if (localStorage.getItem(toggleDualControllers.id) === 'true') {
+        localStorage.setItem(toggleDualControllers.id) = "" + lastSetting;
+        toggleDualControllers.style.display=true;
+        if (lastSetting) {
             document.getElementById("desktop-button1").style.display = "grid"
             document.getElementById("desktop-axis1").style.display = "grid"
             for (let element of desktopElements) element.style.height = "20vw";
