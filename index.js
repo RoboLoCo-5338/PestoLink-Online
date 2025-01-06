@@ -27,7 +27,6 @@ let toggleKeyboardWASD = document.getElementById('toggle-keyboard-style');
 let toggleInfo = document.getElementById('toggle-info');
 let toggleDualControllers = document.getElementById('toggle-dual-controllers')
 let lastKeyPressed = 1;
-let lastSetting = false;
 
 // --------------------------- state management ------------------------------------ //
 if (localStorage.getItem(toggleMobile.id) == null) {
@@ -68,24 +67,19 @@ function updateMobileSlider(sliderElement, toggleState) {
         for (let element of mobileElements) element.style.display = "grid";
         axisCallback = axisAgent.getAxes
         buttonCallback = buttonAgent.getButtons
-        lastSetting = localStorage.getItem(toggleDualControllers.id) === 'true'
-        localStorage.setItem(toggleDualControllers.id) = 'false';
-        toggleDualControllers.style.display=false;
     } else {
         for (let element of mobileElements) element.style.display = "none";
         for (let element of desktopElements) element.style.display = "grid";
         axisCallback = gamepadAgent.getAxes
         buttonCallback = gamepadAgent.getButtons
-        localStorage.setItem(toggleDualControllers.id) = "" + lastSetting;
-        toggleDualControllers.style.display=true;
-        if (lastSetting) {
+        if (localStorage.getItem(toggleDualControllers.id) === 'true') {
             document.getElementById("desktop-button1").style.display = "grid"
             document.getElementById("desktop-axis1").style.display = "grid"
-            for (let element of desktopElements) element.style.height = "20vw";
+            for (let element of desktopElements) element.style.height = "20rem";
         } else {
             document.getElementById("desktop-button1").style.display = "none"
             document.getElementById("desktop-axis1").style.display = "none"
-            for (let element of desktopElements) element.style.height = "30vw";
+            for (let element of desktopElements) element.style.height = "30rem";
         }
     }
 }
@@ -116,11 +110,11 @@ function updateDualControllerSlider(sliderElement, toggleState) {
     if (localStorage.getItem(toggleDualControllers.id) === 'true') {
         document.getElementById("desktop-button1").style.display = "grid"
         document.getElementById("desktop-axis1").style.display = "grid"
-        for (let element of desktopElements) element.style.height = "20vw";
+        for (let element of desktopElements) element.style.height = "25rem";
     } else {
         document.getElementById("desktop-button1").style.display = "none"
         document.getElementById("desktop-axis1").style.display = "none"
-        for (let element of desktopElements) element.style.height = "30vw";
+        for (let element of desktopElements) element.style.height = "30rem";
     }
 }
 function updateSlider(sliderElement, toggleState) {
@@ -134,9 +128,9 @@ function updateSlider(sliderElement, toggleState) {
 
     if (localStorage.getItem(sliderElement.id) === 'true') {
         sliderElement.style.backgroundColor = 'var(--alf-green)';
-        sliderElement.firstElementChild.style.transform = 'translateX(2vw)';
-        sliderElement.firstElementChild.style.webkitTransform = 'translateX(2vw)';
-        sliderElement.firstElementChild.style.msTransform = 'translateX(2vw)';
+        sliderElement.firstElementChild.style.transform = 'translateX(2em)';
+        sliderElement.firstElementChild.style.webkitTransform = 'translateX(2em)';
+        sliderElement.firstElementChild.style.msTransform = 'translateX(2em)';
 
     } else {
         sliderElement.style.backgroundColor = 'rgb(189, 188, 188)';
