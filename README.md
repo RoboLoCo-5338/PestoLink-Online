@@ -9,3 +9,5 @@ PestoLink-Online is a web app designed to run in any browser with Bluetooth Low 
 PestoLink-Online can also be used to control MicroPython based robots, for example an [XRP Kit](https://www.sparkfun.com/products/22230) by using [PestoLink-MicroPython](https://github.com/AlfredoSystems/PestoLink-MicroPython/tree/main).
 
 This WIP web app is a BLE alternitive to [AlfredoConnect-Desktop](https://github.com/AlfredoElectronics/AlfredoConnect-Desktop)
+
+The Roboloco modification adds many features, such as dual input, accurate lighting up of keys, labeled keyboard controls, and more!
